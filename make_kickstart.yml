@@ -1,0 +1,42 @@
+---
+- hosts: unixmgmt
+  gather_facts: no
+  vars:
+    new_hostname: "{{ host_name }}"
+    new_ipaddr: "{{ lookup('dig', host_name + '.comfort.com' ) }}"
+    ipadd_list: "{{ new_ipaddr.split('.') }}"
+    new_mask: "0.0.0.0"
+    route32: "32"
+    route48: "48"
+
+  tasks:
+    - name: "setup the net 10.7.32 netmask and gateway"
+      set_fact:
+         new_mask: "255.255.240.0"
+         new_gateway: "{{ ipadd_list[0] + '.' + ipadd_list[1] + '.' + route32 + '.1' }}"
+      when: ipadd_list[2] >= "32" and ipadd_list[2] <= "47" and ipadd_list[1] == "7"
+    - name: "setup the net 10.8.32 netmask and gateway"
+      set_fact:
+         new_mask: "255.255.252.0"
+         new_gateway: "{{ ipadd_list[0] + '.' + ipadd_list[1] + '.' + route32 + '.1' }}"
+      when: ipadd_list[2] >= "32" and ipadd_list[2] <= "35" and ipadd_list[1] == "8"
+    - name: "setup the net 48 netmask and gateway"
+      set_fact:
+         new_mask: "255.255.240.0"
+         new_gateway: "{{ ipadd_list[0] + '.' + ipadd_list[1] + '.' + route48 + '.1' }}"
+      when: ipadd_list[2] >= "48" and ipadd_list[2] <= "63"
+    - name: "setup nets 81 and 82 netmask and gateway"
+      set_fact:
+         new_mask: "255.255.255.0"
+         new_gateway: "{{ ipadd_list[0] + '.' + ipadd_list[1] + '.' + ipadd_list[2] + '.1' }}"
+      when: ipadd_list[2] == "81" or ipadd_list[2] == "82"
+    - name: "run the include_role last"
+      include_role:
+        name: make_kickstart
+      when: new_mask != "0.0.0.0"
+    - name: "set stats to pass"
+      set_stats:
+        data:
+          build_ip: "{{ new_ipaddr }}"
+          build_netm: "{{ new_mask }}"
+          build_gate: "{{ new_gateway }}"

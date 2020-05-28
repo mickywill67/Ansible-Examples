@@ -1,0 +1,14 @@
+---
+- hosts: "{{ host_name }}"
+  tasks:
+    - name: telegraf install
+      yum:
+        name: /common/sysadminapps/telegraf/linux/telegraf-1.12.2-1.x86_64.rpm
+    - name:  install conf file
+      copy:
+        src: /common/sysadminapps/telegraf/linux/conf/telegraf.conf
+        dest: /etc/telegraf/
+    - name: start telegraf service
+      service:
+        name: telegraf
+        state: started

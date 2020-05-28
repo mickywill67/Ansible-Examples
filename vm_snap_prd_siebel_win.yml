@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  gather_facts: false
+##  - set_fact: todaysdate="{{lookup('pipe','date "+%Y/%m/%d %H:%M"')}}"
+## two parts
+  roles:
+##     - vm_snap_prd_linux
+     - vm_snap_prd_windows

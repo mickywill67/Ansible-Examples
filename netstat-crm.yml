@@ -1,0 +1,14 @@
+---
+- hosts: unixmgmt
+  gather_facts: no
+  vars:
+    job_name: collect_netstat.ksh
+    host_name:
+      - crmprddb11
+      - crmprddb12
+      - crmprddb13
+
+  tasks:
+    - name: run unix script
+      shell: "/common/unixadmins/micky/scripts/run_script.ksh {{ job_name }} {{ item }}"
+      with_items: "{{ host_name }}"

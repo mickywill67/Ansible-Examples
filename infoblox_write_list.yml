@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - include_vars: inventories/prod/group_vars/dns_list2
+    - include_vars: inventories/prod/group_vars/infoblox
+
+    - name: write the new DNS record
+      nios_host_record:
+        name: "{{ item.fqn_hostname }}.comfort.com"
+        ipv4addrs:
+          - ipv4addr: "{{ item.newhostip }}"
+        state: present
+        provider: "{{ nios_provider }}"
+      with_items: "{{ new_dns_list }}"

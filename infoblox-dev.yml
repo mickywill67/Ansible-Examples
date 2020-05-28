@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - include_vars: inventories/prod/group_vars/infoblox
+
+    - name: get next ip
+      set_fact:
+        newhostip: "{{ lookup('nios_next_ip', '10.7.32.0/20', num=5, exclude=exclude_list, provider=nios_provider)[1] }}"
+    - name: print next ip
+      debug:
+        var: newhostip
+
+    - name: configure an IPv4 host record
+      nios_host_record:
+        name: "{{ newhost }}.comfort.com"
+        ipv4:
+          - address: newhostip
+        state: present
+        provider: "{{ nios_provider }}"

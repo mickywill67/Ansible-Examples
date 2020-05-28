@@ -1,0 +1,9 @@
+---
+- hosts: {{ host_name }}
+  tasks:
+    - name:  copy a file
+      copy:
+        src: /etc/fstab
+        dest: /var/tmp/fstab.new
+        owner: willmj
+      become: yes

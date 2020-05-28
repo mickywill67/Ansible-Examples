@@ -1,0 +1,6 @@
+---
+- hosts: "{{ host_name }}"
+
+  tasks:
+    - name: run unix script
+      shell: "/common/unixadmins/micky/scripts/run_script2.ksh {{ job_name }}"

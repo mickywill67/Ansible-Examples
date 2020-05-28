@@ -1,0 +1,5 @@
+---
+- hosts: "{{ host_name }}"
+  tasks:
+    - debug:
+        msg: "{{ hostvars[inventory_hostname].ansible_distribution_version }}"

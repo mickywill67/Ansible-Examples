@@ -1,0 +1,17 @@
+---
+- hosts: "{{ host_name }}"
+  vars:
+    hostenv:
+      dev: '-d'
+      tst: '-t'
+      stg: '-s'
+      prd: '-p'
+
+  tasks:
+    - name: unregister
+      shell: /common/unixadmins/micky/scripts/unreg_satellite.ksh {{ hostenv[environ] }}
+      when: task == 'unreg'
+
+    - name: register
+      shell: /common/unixadmins/micky/scripts/reg_satellite.ksh {{ hostenv[environ] }}
+      when: task == 'reg'

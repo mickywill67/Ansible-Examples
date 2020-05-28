@@ -1,0 +1,8 @@
+---
+- hosts: "{{ host_name }}"
+
+  tasks:
+    - name: start, stop or restart service
+      service:
+        name: ds_agent
+        state: "{{ status }}"

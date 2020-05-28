@@ -1,0 +1,7 @@
+---
+- hosts: unixmgmt
+  gather_facts: no
+
+  tasks:
+  - name: add a host to the inventory
+    shell: "/common/unixadmins/micky/scripts/add_host.ksh {{ host_name }}"

@@ -1,0 +1,9 @@
+---
+- hosts: "{{ host_name }}"
+  tasks:
+    - name: deep security linux install
+      command: /common/sysadminapps/deepsecurity/linux/deepsecurity.sh
+      when: ansible_os_family == 'RedHat'
+    - name: deep security solaris install
+      command: /common/sysadminapps/deepsecurity/solaris/deepsecurity.sh
+      when: ansible_os_family == 'Solaris'

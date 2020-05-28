@@ -1,0 +1,10 @@
+---
+- hosts: "{{ host_name }}"
+
+  tasks:
+    - name: test common mount
+      mount:
+        path: /common
+        src: nasprod:/common
+        fstype: nfs
+        state: present

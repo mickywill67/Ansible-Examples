@@ -1,0 +1,32 @@
+---
+- name: call API for Networker
+  hosts: unixmgmt
+  gather_facts: no
+  vars:
+    networkerurl: hqbackup.comfort.com
+
+  tasks:
+  - name: get a list of clients from networker
+    uri:
+      url: "https://{{ networkerurl }}:9090/nwrestapi/v2/global/clients?fl=hostname&q=hostname:{{ host_name }}"
+      method: GET
+      user: SvcAnsibleNet
+      password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          62336538323733663633643534356566323461623163386434383236626431383432336534383639
+          3964626431636234623362366137633537643631303666650a396139656139386361313461653038
+          30626334333730386163373830643661663736313763646266646163363731616563346261663264
+          6231343964393233380a393763383236613965626566393262373737323230333838643134363139
+          3431
+      force_basic_auth: yes
+      validate_certs: no
+      body_format: json
+    register: restdata
+
+  - set_fact: mycount="{{ restdata.json.count }}"
+##  - debug: var=mycount
+  - name: test mycount
+    shell: echo "not in networker"
+    when: mycount == "0"
+  - shell: echo "in networker"
+    when: mycount == "1"

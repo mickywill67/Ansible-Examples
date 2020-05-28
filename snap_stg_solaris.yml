@@ -1,0 +1,6 @@
+---
+- hosts: unixmgmt
+
+  tasks:
+    - name: Snapshot of Siebel Stage servers
+      shell: "/common/unixadmins/micky/scripts/start_snap_stg.ksh"

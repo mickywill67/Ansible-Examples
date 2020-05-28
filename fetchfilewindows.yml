@@ -1,0 +1,12 @@
+---
+- hosts: windows
+  tasks:
+##    - name: fetch a file from windows
+##      fetch:
+##        src: D:\SRF\siebel_sia_012914PM.srf
+##        dest: /tmp/siebel_sia_012914PM.srf
+##        flat: yes
+##    - name: copy a windows file
+##      win_command: powershell.exe cp Y:\ORAWIN\NETWORK\ADMIN\tnsnames.ora C:\Windows\Temp
+    - name: copy a windows file
+      win_command: powershell.exe cp \\fp01\apps\ORAWIN\NETWORK\ADMIN\tnsnames.ora C:\Windows\Temp

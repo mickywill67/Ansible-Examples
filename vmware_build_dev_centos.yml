@@ -1,0 +1,40 @@
+---
+- hosts: ansprdapp11
+  gather_facts: false
+  connection: local
+  tasks:
+  # get date
+  - set_fact: creationdate="{{lookup('pipe','date "+%Y/%m/%d %H:%M"')}}"
+  # Create a VM from a template
+  - name: create the VM
+    vmware_guest:
+      hostname: 'vctrstgapp11'
+      username: "{{ priv_user }}@comfort.com"
+      password: "{{ priv_password }}"
+      validate_certs: no
+      esxi_hostname: esxch3hst03.comfort.com
+      datacenter: 'CenturyLink CH3'
+      folder: 'Development Linux Servers'
+      name: '{{ host_name }}'
+      state: poweredoff
+      annotation: "{{ notes }} - {{ creationdate }}"
+      disk:
+      - size_gb: 50
+        type: thick
+        datastore: 'CH3_NonProd_Server_Cluster'
+      - size_gb: '{{ disk_size }}'
+        type: thick
+        datastore: 'CH3_NonProd_Server_Cluster'
+      hardware:
+        memory_mb: "{{ memory_gb *1024 }}"
+        num_cpus: '{{ cpu_count }}'
+      networks:
+      - name: "{{ my_vlan }}"
+##      vlan: "{{ vlan_id }}"
+        device_type: 'vmxnet3'
+        type: 'static'
+        ip: "{{ new_ipaddr }}"
+        netmask: "{{ new_mask }}"
+        gateway: "{{ new_gateway }}"
+      template: CENT_8_X_64BIT 
+      wait_for_ip_address: yes

@@ -1,0 +1,9 @@
+---
+- hosts: "{{ host_name }}"
+  tasks:
+    - name: check for deep security linux software
+      command: /common/sysadminapps/deepsecurity/linux/chk_deepsecurity.sh
+      when: ansible_os_family == 'RedHat'
+    - name: check for deep security solaris software
+      command: /common/sysadminapps/deepsecurity/solaris/chk_deepsecurity.sh
+      when: ansible_os_family == 'Solaris'

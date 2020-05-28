@@ -1,0 +1,30 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    new_hostname: "{{ host_name }}"
+    fqn_hostname: "{{ host_name }}.comfort.com"
+
+  tasks:
+    - include_vars: inventories/prod/group_vars/infoblox_{{ vlan_id }}
+
+    - name: get next ip
+      set_fact:
+        newhostip: "{{ lookup('nios_next_ip', infoblox_subnet, num=1, exclude=exclude_list, provider=nios_provider)[0] }}"
+
+    - name: write the new DNS record
+      nios_host_record:
+        name: "{{ fqn_hostname }}"
+        ipv4addrs:
+          - ipv4addr: "{{ newhostip }}"
+        state: present
+        provider: "{{ nios_provider }}"
+
+    - name: "set stats to pass"
+      set_stats:
+        data:
+          build_ip: "{{ newhostip }}"
+          new_ipaddr: "{{ newhostip }}"
+          new_mask: "{{ infoblox_mask }}"
+          new_gateway: "{{ infoblox_gateway }}"
+          my_vlan: "{{ mynet_name }}"

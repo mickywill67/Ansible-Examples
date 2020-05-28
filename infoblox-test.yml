@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - include_vars: inventories/prod/group_vars/infoblox
+    - name: get a host entry in infoblox
+      uri:
+        url: "https://{{ infobloxurl }}/wapi/v1.4/record:host?name~={{ old_host }}"
+        method: GET
+        user: "{{ nios_provider['username'] }}"
+        password: "{{ nios_provider['password'] }}"
+        force_basic_auth: yes
+        validate_certs: no
+        body_format: json
+      register: restdata
+
+    - name: fetch all networkview objects
+      set_fact:
+        networkviews: "{{ lookup('nios', 'networkview', provider=nios_provider) }}"

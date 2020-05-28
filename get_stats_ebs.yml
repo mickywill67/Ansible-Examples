@@ -1,0 +1,12 @@
+---
+- hosts: unixmgmt
+  gather_facts: false
+
+  tasks:
+    - include_vars: inventories/prod/group_vars/ebs_servers
+
+    - name: run unix script
+      shell: "/common/unixadmins/micky/scripts/pull_stats.ksh {{ item }}"
+      async: 300
+      poll: 0
+      loop: "{{ app_servers }}"

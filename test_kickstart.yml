@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    new_hostname: "{{ my_hostname }}"
+    new_ipaddr: "{{ lookup('dig', my_hostname + '.comfort.com' ) }}"
+    ipadd_list: "{{ new_ipaddr.split('.') }}"
+    new_gateway: "{{ ipadd_list[0] + '.' + ipadd_list[1] + '.' + ipadd_list[2] + '.1' }}"
+    new_mask: "255.255.240.0"
+
+  tasks:
+  - name: debug output
+    debug:
+      var: new_gateway
+  - name: debug two
+    debug:
+      var: ipadd_list

@@ -1,0 +1,6 @@
+---
+- hosts: unixmgmt
+
+  tasks:
+    - name: unix wrapper
+      shell: "/common/unixadmins/micky/scripts/loop_wrapper.ksh {{ job_name }}"

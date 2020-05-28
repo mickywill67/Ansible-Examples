@@ -1,0 +1,8 @@
+---
+- hosts: "{{ host_name }}"
+
+  tasks:
+    - name: reboot the server
+      reboot:
+        reboot_timeout: 600
+      ignore_errors: yes

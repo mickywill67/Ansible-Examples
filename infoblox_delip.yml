@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    new_hostname: "{{ host_name }}"
+    fqn_hostname: "{{ host_name}}.comfort.com"
+
+  tasks:
+    - include_vars: inventories/prod/group_vars/infoblox
+
+    - name: get dns record
+      set_fact:
+        myhost: "{{ lookup('nios', 'record:host', filter={'name': fqn_hostname }, provider=nios_provider) }}"
+
+    - name: print dns record
+      debug:
+        var: myhost
+
+    - name: delete the DNS record
+      nios_host_record:
+        name: "{{ fqn_hostname }}"
+        state: absent
+        provider: "{{ nios_provider }}"

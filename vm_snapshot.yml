@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - include_vars: inventories/prod/group_vars/vmsnap_nonprod
+    - set_fact: todaysdate="{{lookup('pipe','date "+%Y%m%d"')}}"
+
+    - name:  take a snapshot of a server
+      vmware_guest_snapshot:
+        hostname: "{{ vcenter_server }}"
+        username: "{{ vcenter_user }}"
+        password: "{{ vcenter_pass }}"
+        datacenter: "{{ dc_name }}"
+        memory_dump: false
+        folder: '/CenturyLink CH3/Development Linux Servers'
+        name: "{{ item }}"
+        state: present
+        snapshot_name: "{{ item }}_{{ todaysdate }}"
+        quiesce: false
+        validate_certs: false
+      delegate_to: localhost

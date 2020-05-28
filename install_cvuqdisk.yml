@@ -1,0 +1,6 @@
+---
+- hosts: "{{ host_name }}"
+  tasks:
+    - name: cvuqdisk install
+      yum:
+        name: /common/sysadminapps/linux_build/oracle_rpms/cvuqdisk-1.0.9-1.rpm

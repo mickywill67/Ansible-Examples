@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+
+  roles:
+     - get_vm_facts
+     - get_vm_facts_prd

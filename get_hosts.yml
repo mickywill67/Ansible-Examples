@@ -1,0 +1,29 @@
+---
+- name: Gather all host system for vCenter
+  gather_facts: no
+
+  hosts: localhost
+  tasks:
+    - include_vars: inventories/prod/group_vars/vcenter_vars_{{ environ }}
+
+    - name: Login task
+      include_tasks: login.yml
+
+    - name: Get Hosts from vCenter
+      uri:
+        url: https://{{ vcenter_server }}/rest/vcenter/host
+        force_basic_auth: yes
+        validate_certs: "{{ validate_certs }}"
+        headers:
+          Cookie: "{{ login.set_cookie }}"
+      register: vchosts
+
+    - name: Print names of ESXi host system in the given vCenter
+      debug:
+        msg: "{{ item.name }}"
+      with_items: "{{ vchosts.json.value }}"
+
+    - name: Output names to a file
+      copy:
+        content: "{{ vchosts.json.value }} \n"
+        dest: "/var/tmp/esx_host.list"

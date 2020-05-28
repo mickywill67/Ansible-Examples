@@ -1,0 +1,18 @@
+---
+- hosts: unixmgmt
+  no_log: True
+  vars:
+    hostlist:
+      dev: host.list.dev
+      poc: host.list.poc
+      test: host.list.tst
+      stage: host.list.stg
+      prod: host.list.prd
+      all: host.list
+## comment
+  tasks:
+    - name: create password hash
+      crypt_hash:
+        passwd: "{{ password }}"
+    - name: push out the password
+      shell: "/common/unixadmins/micky/scripts/push_pass.ksh {{ userid }} {{ hostlist[environ] }}"

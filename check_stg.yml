@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: check stage
+      fail:
+        msg: " Not stage"
+      when: environ != "stg"

@@ -1,0 +1,6 @@
+---
+- hosts: unixmgmt
+
+  tasks:
+    - name: run unix script with parameter
+      shell: "/common/unixadmins/micky/scripts/run_script3.ksh {{ job_name }} {{ host_name }} {{ env }}"

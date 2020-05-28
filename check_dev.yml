@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: check Development
+      fail:
+        msg: " Not development"
+      when: environ != "dev"

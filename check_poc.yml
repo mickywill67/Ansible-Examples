@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: check poc
+      fail:
+        msg: " Not poc"
+      when: environ != "poc"

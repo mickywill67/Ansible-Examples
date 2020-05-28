@@ -1,0 +1,9 @@
+---
+- hosts: "{{ host_name }}"
+  tasks:
+    - name: subscription manager check
+      command: /common/unixadmins/micky/scripts/sub_mngr_refresh.ksh 
+    - name: yum-clean-all
+      command: yum clean all
+      args:
+         warn: no

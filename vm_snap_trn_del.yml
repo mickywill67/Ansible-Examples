@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    del_date: "{{ snap_year + snap_month + snap_day }}"
+##  - set_fact: todaysdate="{{lookup('pipe','date "+%Y/%m/%d %H:%M"')}}"
+## two parts
+  roles:
+     - vm_snap_del_trn

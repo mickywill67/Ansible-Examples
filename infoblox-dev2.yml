@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - include_vars: inventories/prod/group_vars/infoblox
+
+    - name: get next ip
+      set_fact:
+        newhostip: "{{ lookup('nios_next_ip', '10.7.32.0/20', num=1, exclude=exclude_list, provider=nios_provider) }}"
+    - name: print next ip
+      debug:
+        var: newhostip
+    - name: loop on ip and hosts
+      set_fact:
+         nexthost: "{{ lookup('nios', 'record:host', filter={'ipv4addr': '10.7.48.51'}, provider=nios_provider) }}"
+    - name: print hosts
+      debug:
+        var: nexthost
+##    - name:  get a bunch of hosts
+##      ignore_errors: yes
+##      set_fact:
+##        allhosts: "{{ lookup('nios', 'record:host', filter={'ipv4addr': '10.7.48.' + item|quote }, provider=nios_provider) }}"
+##        openipaddr: "{% if allhosts is not defined %}  {{ '10.7.48.' + item|quote }} {% endif %}"
+##      loop: "{{ range(51,200,1)|list }}"

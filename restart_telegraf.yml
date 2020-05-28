@@ -1,0 +1,21 @@
+---
+- hosts: "{{ host_name }}"
+  tasks:
+    - name: install linux conf file
+      copy:
+        src: /common/sysadminapps/telegraf/linux/conf/telegraf.conf
+        dest: /etc/telegraf/
+      when: ansible_os_family == 'RedHat'
+    - name: restart linux telegraf service
+      service:
+        name: telegraf
+        state: restarted
+      when: ansible_os_family == 'RedHat'
+    - name: install solaris conf file
+      copy:
+        src: /common/sysadminapps/telegraf/solaris/conf/telegraf.conf
+        dest: /etc/telegraf/
+      when: ansible_os_family == 'Solaris'
+    - name: restart solaris telegraf service
+      shell: /usr/bin/nohup /etc/rc3.d/S93telegraf restart &
+      when: ansible_os_family == 'Solaris'

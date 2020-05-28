@@ -1,0 +1,14 @@
+---
+- hosts: unixmgmt
+  gather_facts: false
+
+  tasks:
+    - name: run unix script
+      shell: "/usr/bin/ssh {{host_name}} /common/unixadmins/micky/scripts/collect_stats2.ksh"
+      register: output_stats
+##      with_items:
+    - name: debug output
+      debug:
+          msg: "{{ output_stats.stdout }}"
+    - name: run python
+      shell: "/usr/bin/ssh snumber@pytdevapp11 /opt/python/scripts/do_stats.py {{ host_name }} {{ output_stats.stdout }}"

@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    new_hostname: "{{ host_name }}"
+    fqn_hostname: "{{ host_name }}.comfort.com"
+
+  tasks:
+    - include_vars: inventories/prod/group_vars/infoblox_{{ vlan_id }}
+
+    - name: get ip address
+      set_fact:
+##        host: "{{ lookup('dig', fqn_hostname) }}"
+        host: "{{ lookup('nios', 'record:host', filter={'name': fqn_hostname }, provider=nios_provider) }}"
+
+    - name: "set stats to pass"
+      set_stats:
+        data:
+          build_ip: "{{ host.ipv4addrs[0].ipv4addr }}"
+          new_ipaddr: "{{ host.ipv4addrs[0].ipv4addr }}"
+          new_mask: "{{ infoblox_mask }}"
+          new_gateway: "{{ infoblox_gateway }}"
+          my_vlan: "{{ mynet_name }}"

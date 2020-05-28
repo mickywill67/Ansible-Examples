@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - include_vars: inventories/prod/group_vars/dns_list2
+    - include_vars: inventories/prod/group_vars/infoblox
+
+    - name: write the new DNS record
+      shell: "/usr/bin/echo {{ item.fqn_hostname }} {{ item.newhostip }} >> /tmp/dns.list.out"
+      with_items: "{{ new_dns_list }}"

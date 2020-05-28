@@ -1,0 +1,20 @@
+---
+- hosts: unixmgmt
+  gather_facts: no
+  vars:
+    new_hostname: "{{ host_name }}"
+    check_ipaddr: "{{ lookup('dig', host_name + '.comfort.com' ) }}"
+    ipadd_list: "{{ check_ipaddr.split('.') }}"
+
+  tasks:
+    - name: "run the include_role"
+      include_role:
+        name: make_kickstart
+      when: check_ipaddr == new_ipaddr
+    - name: "set stats to pass"
+      set_stats:
+        data:
+          build_ip: "{{ new_ipaddr }}"
+          build_netm: "{{ new_mask }}"
+          build_gate: "{{ new_gateway }}"
+          

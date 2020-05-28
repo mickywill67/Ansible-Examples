@@ -1,0 +1,30 @@
+---
+- hosts: "{{ host_name }}"
+  tasks:
+    - name: check file
+      stat:
+        path: /etc/rc3.d/S93telegraf
+      register: file_results
+    - name: run stop script
+      shell: /etc/rc3.d/S93telegraf stop
+      when: file_results == True
+    - name: remove link
+      file:
+        path: /opt/csw
+        state: absent
+    - name: remove telegraf directory
+      file:
+        path: /etc/telegraf
+        state: absent
+    - name: remove telegraf binary
+      file:
+        path: /usr/bin/telegraf
+        state: absent
+    - name: remove start script - init.d
+      file:
+        path: /etc/init.d/telegraf
+        state: absent
+    - name:  remove start script - rc3
+      file:
+        path: /etc/rc3.d/S93telegraf
+        state: absent

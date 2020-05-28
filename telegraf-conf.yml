@@ -1,0 +1,10 @@
+---
+- hosts: "{{ host_name }}"
+  tasks:
+    - include_role:
+        name: telegraf-conf
+    - name: restart linux telegraf service
+      service:
+        name: telegraf
+        state: restarted
+      when: ansible_os_family == 'RedHat'

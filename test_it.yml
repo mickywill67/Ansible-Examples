@@ -1,0 +1,6 @@
+---
+- hosts: unixmgmt
+
+  tasks:
+    - name: run unix script
+      shell: "/common/unixadmins/micky/scripts/checkos2.ksh"

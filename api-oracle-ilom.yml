@@ -1,0 +1,29 @@
+---
+- name: call API for Oracle ilom
+  hosts: unixmgmt
+  gather_facts: no
+  vars:
+    ilomurl: "{{ host_name }}"
+
+  tasks:
+  - name: update Oracle ilom settings
+    uri:
+      url: "https://{{ ilomurl }}:/rest/v1/SP/alertmgmt/rules/4"
+      method: PATCH
+      user: root
+      password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          32636435346331306334613530353235356535636431656239313863356138343031396164326639
+          3463633036353733363733323131333034336436333238320a313364303836613434646337393266
+          37396236656534323633643937346562653833306464613034346664396330386663386438366366
+          3738623235346562310a343733313333316138386532396462616532363739663636386433316264
+          3235
+      force_basic_auth: yes
+      validate_certs: no
+      body_format: json
+    register: restdata
+
+  - set_fact: mycount="{{ restdata.json.clients }}"
+
+  - debug: var=mycount
+##    loop: "{{ mycount | json_query('hostname')}}"

@@ -1,0 +1,13 @@
+---
+- hosts: "{{ host_name }}"
+
+  tasks:
+    - include_vars: inventories/prod/group_vars/config_{{ environ }}
+    - name: run unix script
+      shell: "/usr/bin/mount -t nfs 10.8.35.151:/common /mnt"
+    - name: run step 2
+      shell: "/usr/bin/sleep 2"
+    - name: run step 3
+      shell: /mnt/sysadminapps/linux_build/configure-rhel.sh {{ env_flag|quote }}
+    - name: run step 4
+      shell: /common/unixadmins/micky/scripts/mk_d01_linux.ksh

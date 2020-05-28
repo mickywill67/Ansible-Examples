@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: check test
+      fail:
+        msg: " Not test"
+      when: environ != "tst"

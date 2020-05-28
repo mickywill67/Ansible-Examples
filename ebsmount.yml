@@ -1,0 +1,12 @@
+---
+- hosts: unixmgmt
+
+  tasks:
+    - include_vars: inventories/prod/group_vars/ebsmount_{{ ebs_env }}
+
+    - name: run ebs mount app
+      shell: "/common/unixadmins/micky/scripts/ebswrapper.ksh m {{ item.host }} {{ item.fsmount }} {{ item.fstab }}"
+      with_items: "{{ app_servers }}"
+    - name: run ebs mount db
+      shell: "/common/unixadmins/micky/scripts/ebswrapper.ksh m {{ item.host }} {{ item.fsmount }} {{ item.fstab }}"
+      with_items: "{{ db_servers }}"

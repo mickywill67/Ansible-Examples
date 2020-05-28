@@ -1,0 +1,8 @@
+---
+- hosts: "{{ host_name }}"
+
+  tasks:
+    - name: redhat subscription manager attach
+      shell: "/usr/sbin/subscription-manager auto-attach --enable"
+    - name: redhat subscription manager refresh
+      shell: "/usr/sbin/subscription-manager refresh"
